@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Autómatas Finitos – APE3</title>
+  <meta name="description" content="Simulador de autómatas finitos deterministas y no deterministas."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+  <main class="home-main">
+    <h1 class="home-titulo">Simulador de Autómatas Finitos</h1>
+    <p class="home-subtitulo">Selecciona un modelo para ver su alfabeto, tabla de transiciones, diagrama y simulador.</p>
+
+    <h2 class="section-title">Autómatas finitos deterministas</h2>
+    <div class="cards-grid">
+      <!-- Cerradura -->
+      <a href="/cerradura" class="card" id="card-cerradura">
+        <h3 class="card-title">Cerradura Inteligente</h3>
+        <p class="card-desc">
+          Modela una cerradura de seguridad digital. Acepta intentos correctos y fallidos.
+          Tres fallos consecutivos bloquean el sistema.
+        </p>
+        <span class="card-link">Ver autómata →</span>
+      </a>
+    </div>
+
+    <h2 class="section-title">Autómatas finitos no deterministas</h2>
+    <div class="cards-grid">
+      <!-- E-Commerce -->
+      <a href="/ecommerce" class="card" id="card-ecommerce">
+        <h3 class="card-title">Analizador E-Commerce</h3>
+        <p class="card-desc">
+          Detecta si un usuario sigue el patrón de comprador potencial: llegar al Home, buscar un producto, y agregarlo al carrito.
+        </p>
+        <span class="card-link">Ver autómata →</span>
+      </a>
+
+      <!-- Telemetría -->
+      <a href="/telemetria" class="card" id="card-telemetria">
+        <h3 class="card-title">Validador Telemetría IoT</h3>
+        <p class="card-desc">
+          Valida paquetes IoT con cabecera, sensores opcionales y checksum. Usa transiciones épsilon.
+        </p>
+        <span class="card-link">Ver autómata →</span>
+      </a>
+    </div>
+
+  </main>
+
+</body>
+</html>
