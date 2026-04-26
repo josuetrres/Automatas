@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Validador Telemetría IoT – AutomataLab</title>
+  <title>Protocolo TCP – AutomataLab</title>
   <meta name="description"
-    content="Valida paquetes de telemetría IoT. Un paquete válido comienza con la cabecera (r), puede incluir lecturas de temperatura (t) y/o humedad (h), y termina con el CRC (c)." />
+    content="Simula el establecimiento de una conexión TCP (Three-way handshake): SYN (s), SYN-ACK (n) y ACK (a)." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
@@ -19,10 +19,10 @@
 
     <!-- Encabezado del ejercicio -->
     <div class="detail-hero">
-      <span class="detail-tipo">AFND-ε – Autómata Finito No Determinista con transiciones épsilon</span>
-      <h1 class="detail-title">Validador Telemetría IoT</h1>
-      <p class="detail-desc">Valida paquetes de telemetría IoT. Un paquete válido comienza con la cabecera (r), puede
-        incluir lecturas de temperatura (t) y/o humedad (h), y termina con el CRC (c).</p>
+      <span class="detail-tipo">AFD – Autómata Finito Determinista</span>
+      <h1 class="detail-title">Protocolo TCP (Three-way Handshake)</h1>
+      <p class="detail-desc">Simula el proceso de establecimiento de una conexión TCP: envío de SYN (s), recepción de
+        SYN-ACK (n) y envío de ACK (a) final.</p>
     </div>
 
     <div class="detail-grid">
@@ -34,24 +34,20 @@
         <section class="panel" id="panel-alfabeto">
           <h2 class="panel-title">Alfabeto (Σ)</h2>
           <p class="panel-subtitle">
-            Σ = { r, t, h, c }
+            Σ = { s, n, a }
           </p>
           <ul class="alfabeto-list">
             <li class="alfabeto-item">
-              <code class="simbolo-badge">r</code>
-              <span>HDR – cabecera del paquete</span>
+              <code class="simbolo-badge">s</code>
+              <span>SYN – Sincronización</span>
             </li>
             <li class="alfabeto-item">
-              <code class="simbolo-badge">t</code>
-              <span>Temperatura – dato de sensor</span>
+              <code class="simbolo-badge">n</code>
+              <span>SYN-ACK – Sincronización y Acuse</span>
             </li>
             <li class="alfabeto-item">
-              <code class="simbolo-badge">h</code>
-              <span>Humedad – dato de sensor</span>
-            </li>
-            <li class="alfabeto-item">
-              <code class="simbolo-badge">c</code>
-              <span>CRC – checksum de validación</span>
+              <code class="simbolo-badge">a</code>
+              <span>ACK – Acuse de recibo</span>
             </li>
           </ul>
         </section>
@@ -62,7 +58,7 @@
           <div class="estados-grid">
             <div class="estado-card estado--inicial">
               <div class="estado-id">q0</div>
-              <div class="estado-desc">Inicio</div>
+              <div class="estado-desc">Cerrado (CLOSED)</div>
               <div class="estado-tags">
                 <span class="tag tag--ini">Inicial</span>
               </div>
@@ -70,37 +66,30 @@
 
             <div class="estado-card">
               <div class="estado-id">q1</div>
-              <div class="estado-desc">HDR recibido</div>
+              <div class="estado-desc">SYN</div>
               <div class="estado-tags">
               </div>
             </div>
 
             <div class="estado-card">
               <div class="estado-id">q2</div>
-              <div class="estado-desc">Esperando dato de sensor (ε desde q1, q3)</div>
-              <div class="estado-tags">
-              </div>
-            </div>
-
-            <div class="estado-card">
-              <div class="estado-id">q3</div>
-              <div class="estado-desc">Dato de sensor recibido</div>
-              <div class="estado-tags">
-              </div>
-            </div>
-
-            <div class="estado-card">
-              <div class="estado-id">q4</div>
-              <div class="estado-desc">Listo para CRC (ε desde q1)</div>
+              <div class="estado-desc">SYN_ACK</div>
               <div class="estado-tags">
               </div>
             </div>
 
             <div class="estado-card estado--aceptacion">
-              <div class="estado-id">q5</div>
-              <div class="estado-desc">Paquete válido (aceptación)</div>
+              <div class="estado-id">q3</div>
+              <div class="estado-desc">ACK (Aceptación)</div>
               <div class="estado-tags">
                 <span class="tag tag--ace">Aceptación</span>
+              </div>
+            </div>
+
+            <div class="estado-card estado--error">
+              <div class="estado-id">q4</div>
+              <div class="estado-desc">Error de conexión</div>
+              <div class="estado-tags">
               </div>
             </div>
           </div>
@@ -121,33 +110,28 @@
               <tbody>
                 <tr>
                   <td><code>q0</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">r</code></td>
+                  <td><code class="simbolo-badge simbolo-badge--sm">s</code></td>
                   <td><code>q1</code></td>
                 </tr>
                 <tr>
                   <td><code>q1</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">ε</code></td>
-                  <td><code>q2, q4</code></td>
-                </tr>
-                <tr>
-                  <td><code>q2</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">t / h</code></td>
-                  <td><code>q3</code></td>
-                </tr>
-                <tr>
-                  <td><code>q3</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">ε</code></td>
+                  <td><code class="simbolo-badge simbolo-badge--sm">n</code></td>
                   <td><code>q2</code></td>
                 </tr>
                 <tr>
+                  <td><code>q2</code></td>
+                  <td><code class="simbolo-badge simbolo-badge--sm">a</code></td>
                   <td><code>q3</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">c</code></td>
-                  <td><code>q5</code></td>
                 </tr>
                 <tr>
+                  <td><code>q3, q4</code></td>
+                  <td><code class="simbolo-badge simbolo-badge--sm">s, n, a</code></td>
                   <td><code>q4</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">c</code></td>
-                  <td><code>q5</code></td>
+                </tr>
+                <tr>
+                  <td><code>q0, q1, q2</code></td>
+                  <td><code class="simbolo-badge simbolo-badge--sm">otro</code></td>
+                  <td><code>q4</code></td>
                 </tr>
               </tbody>
             </table>
@@ -163,13 +147,13 @@
         <section class="panel" id="panel-diagrama">
           <h2 class="panel-title">Diagrama de Transición</h2>
           <div class="diagram-box">
-            <img src="{{ url_for('static', filename='images/telemetria.png') }}"
-              alt="Diagrama de transición – Validador Telemetría IoT" class="diagram-img" id="img-diagrama"
+            <img src="{{ url_for('static', filename='images/tcp.png') }}" alt="Diagrama de transición – Protocolo TCP"
+              class="diagram-img" id="img-diagrama"
               onerror="this.style.display='none'; document.getElementById('diagram-placeholder').style.display='flex';" />
             <div class="diagram-placeholder" id="diagram-placeholder">
               <span>🖼️</span>
               <p>Imagen no disponible</p>
-              <small>Agrega <code>telemetria.png</code> en <code>static/images/</code></small>
+              <small>Agrega <code>tcp.png</code> en <code>static/images/</code></small>
             </div>
           </div>
         </section>
@@ -177,17 +161,17 @@
         <!-- Simulador -->
         <section class="panel" id="panel-simulador">
           <h2 class="panel-title">Simulador</h2>
-          <p class="panel-subtitle">Ingresa una secuencia separada por comas y presiona Evaluar.</p>
+          <p class="panel-subtitle">Ingresa la secuencia del handshake (ej. sna) y presiona Evaluar.</p>
 
           <div class="sim-form">
-            <input type="text" id="input-secuencia" class="sim-input" placeholder="Ejemplo: r, t, h, c"
-              autocomplete="off" spellcheck="false" />
+            <input type="text" id="input-secuencia" class="sim-input" placeholder="Ejemplo: sna" autocomplete="off"
+              spellcheck="false" />
             <button class="btn-run" id="btn-evaluar" onclick="evaluar()">Evaluar</button>
           </div>
 
           <div class="sim-example">
             Ejemplo:
-            <button class="btn-example" onclick="useExample()">r, t, h, c</button>
+            <button class="btn-example" onclick="useExample()">sna</button>
           </div>
 
           <div class="resultado" id="resultado" style="display:none;">
@@ -203,8 +187,8 @@
   </main>
 
   <script>
-    const ENDPOINT = "/api/telemetria";
-    const EJEMPLO = "r, t, h, c";
+    const ENDPOINT = "/api/tcp";
+    const EJEMPLO = "sna";
 
     function useExample() {
       document.getElementById('input-secuencia').value = EJEMPLO;
@@ -242,7 +226,7 @@
       box.style.display = 'block';
       box.className = 'resultado resultado--' + (data.status || 'error');
 
-      const labels = { aceptado: 'Aceptado', fallo: 'Rechazado', bloqueado: 'Bloqueado', error: 'Error' };
+      const labels = { aceptado: 'Aceptado', fallo: 'Rechazado', error: 'Error' };
       header.innerHTML = `${labels[data.status] || data.status}`;
       msg.textContent = data.message || '';
 
@@ -251,13 +235,8 @@
         extraHTML += `<span class="info-chip">Estado final: <strong>${data.estado_final}</strong></span>`;
       if (data.estados_activos?.length)
         extraHTML += `<span class="info-chip">Estados activos: <strong>{${data.estados_activos.join(', ')}}</strong></span>`;
-      if (data.recorrido?.length)
-        extraHTML += `<div class="recorrido">
-          <span class="rec-label">Recorrido:</span>
-          ${data.recorrido.map((e, i) => `<span class="rec-step">${e}</span>${i < data.recorrido.length - 1 ? '<span class="rec-arrow">→</span>' : ''}`).join('')}
-        </div>`;
-      extra.innerHTML = extraHTML;
 
+      extra.innerHTML = extraHTML;
       box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 

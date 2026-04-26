@@ -4,9 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Validador Telemetría IoT – AutomataLab</title>
-  <meta name="description"
-    content="Valida paquetes de telemetría IoT. Un paquete válido comienza con la cabecera (r), puede incluir lecturas de temperatura (t) y/o humedad (h), y termina con el CRC (c)." />
+  <title>Analizador ADN – AutomataLab</title>
+  <meta name="description" content="Detecta la secuencia genética 'KGX*F' en una cadena de ADN." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
@@ -19,10 +18,10 @@
 
     <!-- Encabezado del ejercicio -->
     <div class="detail-hero">
-      <span class="detail-tipo">AFND-ε – Autómata Finito No Determinista con transiciones épsilon</span>
-      <h1 class="detail-title">Validador Telemetría IoT</h1>
-      <p class="detail-desc">Valida paquetes de telemetría IoT. Un paquete válido comienza con la cabecera (r), puede
-        incluir lecturas de temperatura (t) y/o humedad (h), y termina con el CRC (c).</p>
+      <span class="detail-tipo">AFND – Autómata Finito No Determinista</span>
+      <h1 class="detail-title">Analizador de ADN</h1>
+      <p class="detail-desc">Detecta si una cadena de ADN contiene el patrón genético específico: comienza con 'K',
+        seguido de 'G', opcionalmente varias 'X', y termina en 'F'.</p>
     </div>
 
     <div class="detail-grid">
@@ -34,24 +33,24 @@
         <section class="panel" id="panel-alfabeto">
           <h2 class="panel-title">Alfabeto (Σ)</h2>
           <p class="panel-subtitle">
-            Σ = { r, t, h, c }
+            Σ = { K, G, X, F, ... } (Cualquier base nitrogenada o símbolo)
           </p>
           <ul class="alfabeto-list">
             <li class="alfabeto-item">
-              <code class="simbolo-badge">r</code>
-              <span>HDR – cabecera del paquete</span>
+              <code class="simbolo-badge">K</code>
+              <span>Lisina</span>
             </li>
             <li class="alfabeto-item">
-              <code class="simbolo-badge">t</code>
-              <span>Temperatura – dato de sensor</span>
+              <code class="simbolo-badge">G</code>
+              <span>Glicina</span>
             </li>
             <li class="alfabeto-item">
-              <code class="simbolo-badge">h</code>
-              <span>Humedad – dato de sensor</span>
+              <code class="simbolo-badge">X</code>
+              <span>Cualquier aminoácido (opcional)</span>
             </li>
             <li class="alfabeto-item">
-              <code class="simbolo-badge">c</code>
-              <span>CRC – checksum de validación</span>
+              <code class="simbolo-badge">F</code>
+              <span>Fenilalanina </span>
             </li>
           </ul>
         </section>
@@ -62,7 +61,7 @@
           <div class="estados-grid">
             <div class="estado-card estado--inicial">
               <div class="estado-id">q0</div>
-              <div class="estado-desc">Inicio</div>
+              <div class="estado-desc">Buscando patrón</div>
               <div class="estado-tags">
                 <span class="tag tag--ini">Inicial</span>
               </div>
@@ -70,35 +69,21 @@
 
             <div class="estado-card">
               <div class="estado-id">q1</div>
-              <div class="estado-desc">HDR recibido</div>
+              <div class="estado-desc">Lisina detectada</div>
               <div class="estado-tags">
               </div>
             </div>
 
             <div class="estado-card">
               <div class="estado-id">q2</div>
-              <div class="estado-desc">Esperando dato de sensor (ε desde q1, q3)</div>
-              <div class="estado-tags">
-              </div>
-            </div>
-
-            <div class="estado-card">
-              <div class="estado-id">q3</div>
-              <div class="estado-desc">Dato de sensor recibido</div>
-              <div class="estado-tags">
-              </div>
-            </div>
-
-            <div class="estado-card">
-              <div class="estado-id">q4</div>
-              <div class="estado-desc">Listo para CRC (ε desde q1)</div>
+              <div class="estado-desc">Glicina detectada / Procesando X</div>
               <div class="estado-tags">
               </div>
             </div>
 
             <div class="estado-card estado--aceptacion">
-              <div class="estado-id">q5</div>
-              <div class="estado-desc">Paquete válido (aceptación)</div>
+              <div class="estado-id">q3</div>
+              <div class="estado-desc">Fenilalanina (Proteína reconocida)</div>
               <div class="estado-tags">
                 <span class="tag tag--ace">Aceptación</span>
               </div>
@@ -113,41 +98,41 @@
             <table class="trans-table">
               <thead>
                 <tr>
-                  <th>Estado actual</th>
-                  <th>Símbolo</th>
-                  <th>Estado siguiente</th>
+                  <th>δ</th>
+                  <th>K</th>
+                  <th>G</th>
+                  <th>X</th>
+                  <th>F</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>q0</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">r</code></td>
-                  <td><code>q1</code></td>
+                  <td><code>{q0, q1}</code></td>
+                  <td><code>{q0}</code></td>
+                  <td><code>{q0}</code></td>
+                  <td><code>{q0}</code></td>
                 </tr>
                 <tr>
                   <td><code>q1</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">ε</code></td>
-                  <td><code>q2, q4</code></td>
+                  <td><code>∅</code></td>
+                  <td><code>{q2}</code></td>
+                  <td><code>∅</code></td>
+                  <td><code>∅</code></td>
                 </tr>
                 <tr>
                   <td><code>q2</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">t / h</code></td>
-                  <td><code>q3</code></td>
+                  <td><code>∅</code></td>
+                  <td><code>∅</code></td>
+                  <td><code>{q2}</code></td>
+                  <td><code>{q3}</code></td>
                 </tr>
                 <tr>
                   <td><code>q3</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">ε</code></td>
-                  <td><code>q2</code></td>
-                </tr>
-                <tr>
-                  <td><code>q3</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">c</code></td>
-                  <td><code>q5</code></td>
-                </tr>
-                <tr>
-                  <td><code>q4</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">c</code></td>
-                  <td><code>q5</code></td>
+                  <td><code>{q3}</code></td>
+                  <td><code>{q3}</code></td>
+                  <td><code>{q3}</code></td>
+                  <td><code>{q3}</code></td>
                 </tr>
               </tbody>
             </table>
@@ -163,13 +148,13 @@
         <section class="panel" id="panel-diagrama">
           <h2 class="panel-title">Diagrama de Transición</h2>
           <div class="diagram-box">
-            <img src="{{ url_for('static', filename='images/telemetria.png') }}"
-              alt="Diagrama de transición – Validador Telemetría IoT" class="diagram-img" id="img-diagrama"
+            <img src="{{ url_for('static', filename='images/adn.png') }}" alt="Diagrama de transición – Analizador ADN"
+              class="diagram-img" id="img-diagrama"
               onerror="this.style.display='none'; document.getElementById('diagram-placeholder').style.display='flex';" />
             <div class="diagram-placeholder" id="diagram-placeholder">
               <span>🖼️</span>
               <p>Imagen no disponible</p>
-              <small>Agrega <code>telemetria.png</code> en <code>static/images/</code></small>
+              <small>Agrega <code>adn.png</code> en <code>static/images/</code></small>
             </div>
           </div>
         </section>
@@ -177,17 +162,18 @@
         <!-- Simulador -->
         <section class="panel" id="panel-simulador">
           <h2 class="panel-title">Simulador</h2>
-          <p class="panel-subtitle">Ingresa una secuencia separada por comas y presiona Evaluar.</p>
+          <p class="panel-subtitle">Ingresa la secuencia de ADN (ej. AAAKGF) y presiona Evaluar.</p>
 
           <div class="sim-form">
-            <input type="text" id="input-secuencia" class="sim-input" placeholder="Ejemplo: r, t, h, c"
-              autocomplete="off" spellcheck="false" />
+            <input type="text" id="input-secuencia" class="sim-input" placeholder="Ejemplo: AAAKGF" autocomplete="off"
+              spellcheck="false" />
             <button class="btn-run" id="btn-evaluar" onclick="evaluar()">Evaluar</button>
           </div>
 
           <div class="sim-example">
-            Ejemplo:
-            <button class="btn-example" onclick="useExample()">r, t, h, c</button>
+            Ejemplos:
+            <button class="btn-example" onclick="useExample('AAAKGF')">AAAKGF</button>
+            <button class="btn-example" onclick="useExample('KGXXF')">KGXXF</button>
           </div>
 
           <div class="resultado" id="resultado" style="display:none;">
@@ -203,11 +189,10 @@
   </main>
 
   <script>
-    const ENDPOINT = "/api/telemetria";
-    const EJEMPLO = "r, t, h, c";
+    const ENDPOINT = "/api/adn";
 
-    function useExample() {
-      document.getElementById('input-secuencia').value = EJEMPLO;
+    function useExample(ex) {
+      document.getElementById('input-secuencia').value = ex;
     }
 
     async function evaluar() {
@@ -242,7 +227,7 @@
       box.style.display = 'block';
       box.className = 'resultado resultado--' + (data.status || 'error');
 
-      const labels = { aceptado: 'Aceptado', fallo: 'Rechazado', bloqueado: 'Bloqueado', error: 'Error' };
+      const labels = { aceptado: 'Aceptado', fallo: 'Rechazado', error: 'Error' };
       header.innerHTML = `${labels[data.status] || data.status}`;
       msg.textContent = data.message || '';
 
@@ -251,13 +236,8 @@
         extraHTML += `<span class="info-chip">Estado final: <strong>${data.estado_final}</strong></span>`;
       if (data.estados_activos?.length)
         extraHTML += `<span class="info-chip">Estados activos: <strong>{${data.estados_activos.join(', ')}}</strong></span>`;
-      if (data.recorrido?.length)
-        extraHTML += `<div class="recorrido">
-          <span class="rec-label">Recorrido:</span>
-          ${data.recorrido.map((e, i) => `<span class="rec-step">${e}</span>${i < data.recorrido.length - 1 ? '<span class="rec-arrow">→</span>' : ''}`).join('')}
-        </div>`;
-      extra.innerHTML = extraHTML;
 
+      extra.innerHTML = extraHTML;
       box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 

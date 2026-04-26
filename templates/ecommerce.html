@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Analizador E-Commerce – AutomataLab</title>
-  <meta name="description" content="Detecta si un usuario sigue el patrón de un comprador potencial: llegar al Home, realizar búsquedas y finalmente añadir al carrito."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <meta name="description"
+    content="Detecta si un usuario sigue el patrón de un comprador potencial: llegar al Home, realizar búsquedas y finalmente añadir al carrito." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
+
 <body>
 
   <main class="detail-main">
@@ -18,7 +21,8 @@
     <div class="detail-hero">
       <span class="detail-tipo">AFND – Autómata Finito No Determinista</span>
       <h1 class="detail-title">Analizador E-Commerce</h1>
-      <p class="detail-desc">Detecta si un usuario sigue el patrón de un comprador potencial: llegar al Home, realizar búsquedas y finalmente añadir al carrito.</p>
+      <p class="detail-desc">Detecta si un usuario sigue el patrón de un comprador potencial: llegar al Home, realizar
+        búsquedas y finalmente añadir al carrito.</p>
     </div>
 
     <div class="detail-grid">
@@ -56,29 +60,29 @@
               <div class="estado-id">q0</div>
               <div class="estado-desc">Inicio / esperando visita al Home</div>
               <div class="estado-tags">
-                  <span class="tag tag--ini">Inicial</span>
+                <span class="tag tag--ini">Inicial</span>
               </div>
             </div>
-            
+
             <div class="estado-card">
               <div class="estado-id">q1</div>
               <div class="estado-desc">Home visitado</div>
               <div class="estado-tags">
               </div>
             </div>
-            
+
             <div class="estado-card">
               <div class="estado-id">q2</div>
               <div class="estado-desc">Búsqueda realizada</div>
               <div class="estado-tags">
               </div>
             </div>
-            
+
             <div class="estado-card estado--aceptacion">
               <div class="estado-id">q3</div>
               <div class="estado-desc">Comprador potencial (aceptación)</div>
               <div class="estado-tags">
-                  <span class="tag tag--ace">Aceptación</span>
+                <span class="tag tag--ace">Aceptación</span>
               </div>
             </div>
           </div>
@@ -136,13 +140,9 @@
         <section class="panel" id="panel-diagrama">
           <h2 class="panel-title">Diagrama de Transición</h2>
           <div class="diagram-box">
-            <img
-              src="{{ url_for('static', filename='images/ecommerce.png') }}"
-              alt="Diagrama de transición – Analizador E-Commerce"
-              class="diagram-img"
-              id="img-diagrama"
-              onerror="this.style.display='none'; document.getElementById('diagram-placeholder').style.display='flex';"
-            />
+            <img src="{{ url_for('static', filename='images/ecommerce.png') }}"
+              alt="Diagrama de transición – Analizador E-Commerce" class="diagram-img" id="img-diagrama"
+              onerror="this.style.display='none'; document.getElementById('diagram-placeholder').style.display='flex';" />
             <div class="diagram-placeholder" id="diagram-placeholder">
               <span>🖼️</span>
               <p>Imagen no disponible</p>
@@ -157,14 +157,8 @@
           <p class="panel-subtitle">Ingresa una secuencia separada por comas y presiona Evaluar.</p>
 
           <div class="sim-form">
-            <input
-              type="text"
-              id="input-secuencia"
-              class="sim-input"
-              placeholder="Ejemplo: h, s, c"
-              autocomplete="off"
-              spellcheck="false"
-            />
+            <input type="text" id="input-secuencia" class="sim-input" placeholder="Ejemplo: h, s, c" autocomplete="off"
+              spellcheck="false" />
             <button class="btn-run" id="btn-evaluar" onclick="evaluar()">Evaluar</button>
           </div>
 
@@ -187,7 +181,7 @@
 
   <script>
     const ENDPOINT = "/api/ecommerce";
-    const EJEMPLO  = "h, s, c";
+    const EJEMPLO = "h, s, c";
 
     function useExample() {
       document.getElementById('input-secuencia').value = EJEMPLO;
@@ -202,7 +196,7 @@
       btn.textContent = 'Evaluando…';
 
       try {
-        const res  = await fetch(ENDPOINT, {
+        const res = await fetch(ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ secuencia }),
@@ -217,17 +211,16 @@
     }
 
     function mostrarResultado(data) {
-      const box    = document.getElementById('resultado');
+      const box = document.getElementById('resultado');
       const header = document.getElementById('resultado-header');
-      const msg    = document.getElementById('resultado-msg');
-      const extra  = document.getElementById('resultado-extra');
+      const msg = document.getElementById('resultado-msg');
+      const extra = document.getElementById('resultado-extra');
 
       box.style.display = 'block';
       box.className = 'resultado resultado--' + (data.status || 'error');
 
-      const iconos = { aceptado:'✅', fallo:'❌', bloqueado:'🔒', error:'⚠️' };
-      const labels = { aceptado:'Aceptado', fallo:'Rechazado', bloqueado:'Bloqueado', error:'Error' };
-      header.innerHTML = `${iconos[data.status] || '⚠️'} ${labels[data.status] || data.status}`;
+      const labels = { aceptado: 'Aceptado', fallo: 'Rechazado', bloqueado: 'Bloqueado', error: 'Error' };
+      header.innerHTML = `${labels[data.status] || data.status}`;
       msg.textContent = data.message || '';
 
       let extraHTML = '';
@@ -238,11 +231,11 @@
       if (data.recorrido?.length)
         extraHTML += `<div class="recorrido">
           <span class="rec-label">Recorrido:</span>
-          ${data.recorrido.map((e,i)=>`<span class="rec-step">${e}</span>${i<data.recorrido.length-1?'<span class="rec-arrow">→</span>':''}`).join('')}
+          ${data.recorrido.map((e, i) => `<span class="rec-step">${e}</span>${i < data.recorrido.length - 1 ? '<span class="rec-arrow">→</span>' : ''}`).join('')}
         </div>`;
       extra.innerHTML = extraHTML;
 
-      box.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     document.getElementById('input-secuencia').addEventListener('keydown', e => {
@@ -251,4 +244,5 @@
   </script>
 
 </body>
+
 </html>

@@ -1,4 +1,0 @@
-# Coloca aquí las imágenes de los diagramas de transición:
-#   cerradura.png
-#   ecommerce.png
-#   telemetria.png
