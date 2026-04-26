@@ -73,9 +73,5 @@ class CerraduraInteligente:
 if __name__ == "__main__":
     cerradura1 = CerraduraInteligente()
     print("Prueba 1:", cerradura1.procesar_secuencia("[f, f, f]"))
-
-    cerradura2 = CerraduraInteligente()
-    print("Prueba 2:", cerradura2.procesar_secuencia("f, f, c"))
-
-    cerradura3 = CerraduraInteligente()
-    print("Prueba 3:", cerradura3.procesar_secuencia("[c, f, c, c, f, c]"))
+    print("Prueba 2:", cerradura1.procesar_secuencia("f, f, c"))
+    print("Prueba 3:", cerradura1.procesar_secuencia("[c, f, c, c, f, c]"))

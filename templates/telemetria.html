@@ -114,40 +114,61 @@
               <thead>
                 <tr>
                   <th>Estado actual</th>
-                  <th>Símbolo</th>
-                  <th>Estado siguiente</th>
+                  <th>HDR</th>
+                  <th>TEMP</th>
+                  <th>HUM</th>
+                  <th>CRC</th>
+                  <th>ε</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>q0</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">r</code></td>
                   <td><code>q1</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
                 </tr>
                 <tr>
                   <td><code>q1</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">ε</code></td>
-                  <td><code>q2, q4</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>q3, q4</code></td>
                 </tr>
                 <tr>
                   <td><code>q2</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">t / h</code></td>
+                  <td><code>--</code></td>
                   <td><code>q3</code></td>
+                  <td><code>q3</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
                 </tr>
                 <tr>
                   <td><code>q3</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">ε</code></td>
-                  <td><code>q2</code></td>
-                </tr>
-                <tr>
-                  <td><code>q3</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">c</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
                   <td><code>q5</code></td>
+                  <td><code>q3</code></td>
                 </tr>
                 <tr>
                   <td><code>q4</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">c</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
                   <td><code>q5</code></td>
+                  <td><code>--</code></td>
+                </tr>
+                <tr>
+                  <td><code>q5</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
+                  <td><code>--</code></td>
                 </tr>
               </tbody>
             </table>
@@ -249,8 +270,6 @@
       let extraHTML = '';
       if (data.estado_final)
         extraHTML += `<span class="info-chip">Estado final: <strong>${data.estado_final}</strong></span>`;
-      if (data.estados_activos?.length)
-        extraHTML += `<span class="info-chip">Estados activos: <strong>{${data.estados_activos.join(', ')}}</strong></span>`;
       if (data.recorrido?.length)
         extraHTML += `<div class="recorrido">
           <span class="rec-label">Recorrido:</span>

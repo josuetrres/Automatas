@@ -12,7 +12,19 @@ class ValidadorAFND:
             
         return nuevos_estados
 
-    def evaluar_secuencia(self, arreglo: list):
+    def procesar_secuencia(self, secuencia: str) -> dict:
+        secuencia_limpia = secuencia.replace('[', '').replace(']', '').replace(' ', '')
+        partes = secuencia_limpia.split(',')
+
+        arreglo = []
+        for x in partes:
+            if x:
+                arreglo.append(x)
+
+        for letra in arreglo:
+            if letra.lower() not in ['r', 't', 'h', 'c']:
+                return {"status": "error", "message": f"Carácter inválido '{letra}'. Usa r, t, h o c."}
+
         indice = 0
         total_datos = len(arreglo)
 
@@ -42,26 +54,29 @@ class ValidadorAFND:
             indice += 1
 
         self.estados_actuales = self.paso_epsilon(self.estados_actuales)
+        estados_finales = sorted(self.estados_actuales)
 
         if 'q5' in self.estados_actuales:
-            print("Éxito: Paquete IoT Válido")
+            return {
+                "status": "aceptado",
+                "message": "Paquete IoT válido.",
+            }
         else:
-            print(f"Fallo: Paquete IoT Inválido. Se detuvo en: {self.estados_actuales}")
+            return {
+                "status": "fallo",
+                "message": "Paquete IoT inválido.",
+            }
 
 
 if __name__ == "__main__":
     validador1 = ValidadorAFND()
-    print("Prueba 1 (r, c):", end=" ")
-    validador1.evaluar_secuencia(['r', 'c']) 
+    print("Prueba 1 (r, c):", validador1.procesar_secuencia("[r, c]")) 
 
     validador2 = ValidadorAFND()
-    print("Prueba 2 (r, t, h, c):", end=" ")
-    validador2.evaluar_secuencia(['r', 't', 'h', 'c']) 
+    print("Prueba 2 (r, t, h, c):", validador2.procesar_secuencia("[r, t, h, c]")) 
 
     validador3 = ValidadorAFND()
-    print("Prueba 3 (r, t, c, h):", end=" ")
-    validador3.evaluar_secuencia(['r', 't', 'c', 'h']) 
+    print("Prueba 3 (r, t, c, h):", validador3.procesar_secuencia("[r, t, c, h]")) 
     
     validador4 = ValidadorAFND()
-    print("Prueba 4 (r, t, c, h):", end=" ")
-    validador4.evaluar_secuencia(['r', 't', 'h', 'c']) 
+    print("Prueba 4 (r, t, h, c):", validador4.procesar_secuencia("[r, t, h, c]"))

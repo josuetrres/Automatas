@@ -96,34 +96,34 @@
               <thead>
                 <tr>
                   <th>Estado actual</th>
-                  <th>Símbolo</th>
-                  <th>Estado siguiente</th>
+                  <th>Home</th>
+                  <th>Search</th>
+                  <th>Cart</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>q0</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">h</code></td>
                   <td><code>q0, q1</code></td>
-                </tr>
-                <tr>
                   <td><code>q0</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">s/c</code></td>
                   <td><code>q0</code></td>
                 </tr>
                 <tr>
                   <td><code>q1</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">s</code></td>
+                  <td><code>--</code></td>
                   <td><code>q2</code></td>
+                  <td><code>--</code></td>
                 </tr>
                 <tr>
                   <td><code>q2</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">s</code></td>
+                  <td><code>--</code></td>
                   <td><code>q2</code></td>
+                  <td><code>q3</code></td>
                 </tr>
                 <tr>
+                  <td><code>q3</code></td>
+                  <td><code>--</code></td>
                   <td><code>q2</code></td>
-                  <td><code class="simbolo-badge simbolo-badge--sm">c</code></td>
                   <td><code>q3</code></td>
                 </tr>
               </tbody>
@@ -224,10 +224,6 @@
       msg.textContent = data.message || '';
 
       let extraHTML = '';
-      if (data.estado_final)
-        extraHTML += `<span class="info-chip">Estado final: <strong>${data.estado_final}</strong></span>`;
-      if (data.estados_activos?.length)
-        extraHTML += `<span class="info-chip">Estados activos: <strong>{${data.estados_activos.join(', ')}}</strong></span>`;
       if (data.recorrido?.length)
         extraHTML += `<div class="recorrido">
           <span class="rec-label">Recorrido:</span>

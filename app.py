@@ -56,96 +56,18 @@ def api_cerradura():
 def api_ecommerce():
     data = request.get_json()
     secuencia_str = data.get('secuencia', '')
-    limpia = secuencia_str.replace('[', '').replace(']', '').replace(' ', '')
-    arreglo = [x for x in limpia.split(',') if x]
     analizador = AnalizadorEcommerce()
-
-    indice = 0
-    total_datos = len(arreglo)
-    while indice < total_datos:
-        dato = arreglo[indice].lower()
-        if dato not in ['h', 's', 'c']:
-            return jsonify({"status": "error", "message": f"Carácter inválido '{dato}'. Usa h, s o c."})
-        siguientes_estados = set()
-        for estado in analizador.estados_actuales:
-            if estado == 'q0':
-                siguientes_estados.add('q0')
-                if dato == 'h':
-                    siguientes_estados.add('q1')
-            elif estado == 'q1':
-                if dato == 's':
-                    siguientes_estados.add('q2')
-            elif estado == 'q2':
-                if dato == 's':
-                    siguientes_estados.add('q2')
-                elif dato == 'c':
-                    siguientes_estados.add('q3')
-        analizador.estados_actuales = siguientes_estados
-        if not analizador.estados_actuales:
-            break
-        indice += 1
-
-    estados_finales = sorted(analizador.estados_actuales)
-    if 'q3' in analizador.estados_actuales:
-        return jsonify({
-            "status": "aceptado",
-            "message": "Usuario clasificado como Comprador Potencial.",
-            "estado_final": "q3",
-            "estados_activos": estados_finales,
-        })
-    else:
-        return jsonify({
-            "status": "fallo",
-            "message": "El usuario no cumplió el patrón de compra.",
-            "estados_activos": estados_finales,
-        })
+    resultado = analizador.procesar_secuencia(secuencia_str)
+    return jsonify(resultado)
 
 
 @app.route('/api/telemetria', methods=['POST'])
 def api_telemetria():
     data = request.get_json()
     secuencia_str = data.get('secuencia', '')
-    limpia = secuencia_str.replace('[', '').replace(']', '').replace(' ', '')
-    arreglo = [x for x in limpia.split(',') if x]
     validador = ValidadorAFND()
-
-    for letra in arreglo:
-        if letra.lower() not in ['r', 't', 'h', 'c']:
-            return jsonify({"status": "error", "message": f"Carácter inválido '{letra}'. Usa r, t, h o c."})
-
-    indice = 0
-    total_datos = len(arreglo)
-    while indice < total_datos:
-        dato = arreglo[indice].lower()
-        validador.estados_actuales = validador.paso_epsilon(validador.estados_actuales)
-        siguientes_estados = set()
-        for estado in validador.estados_actuales:
-            if estado == 'q0' and dato == 'r':
-                siguientes_estados.add('q1')
-            elif estado == 'q2' and dato in ['t', 'h']:
-                siguientes_estados.add('q3')
-            elif estado in ['q3', 'q4'] and dato == 'c':
-                siguientes_estados.add('q5')
-        validador.estados_actuales = siguientes_estados
-        if not validador.estados_actuales:
-            break
-        indice += 1
-
-    validador.estados_actuales = validador.paso_epsilon(validador.estados_actuales)
-    estados_finales = sorted(validador.estados_actuales)
-
-    if 'q5' in validador.estados_actuales:
-        return jsonify({
-            "status": "aceptado",
-            "message": "Paquete IoT válido.",
-            "estados_activos": estados_finales,
-        })
-    else:
-        return jsonify({
-            "status": "fallo",
-            "message": "Paquete IoT inválido.",
-            "estados_activos": estados_finales,
-        })
+    resultado = validador.procesar_secuencia(secuencia_str)
+    return jsonify(resultado)
 
 @app.route('/api/transaccion', methods=['POST'])
 def api_transaccion():
